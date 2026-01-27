@@ -16,35 +16,93 @@ datasource db {
 
 
 
+//table cetegory 1
+model Category {
+  id String @id @default(uuid())
+  name String @unique
+  description String ?
 
-
- // ২. Categories Table
-model Categories {
-  id          String      @id @default(uuid())
-  name        String      @unique
-  description String?
-  medicines   Medicines[]
+  Medicines Medicines[]
 
   @@map("Categories")
-}
+ }
 
-// ৩. Medicines Table
-model Medicines {
-  id          String   @id @default(uuid())
-  name        String
-  genericName String?  @map("generic_name")
-  price       Float
-  stock       Int      @default(0)
-  expiryDate  DateTime @map("expiry_date")
-  
-  // Foreign Keys
-  categoryId  String   @map("category_id")
+//table medicienes 2
+model Medicines{
+  id String @id @default(uuid())
+  name String
+  price Float
+  stock Int @default(0)
+  expiryDate DateTime @map("expiry_date")
+
+  //foraign key
+  categoryId String @map("categoryId")
+  category Category @relation(fields: [categoryId],references: [id])
+
+
+  // Better Auth  theke asche 
   sellerId    String   @map("seller_id")
 
-  // Relations
-  category    Categories @relation(fields: [categoryId], references: [id])
- 
+  //relation ship 
+  OrderItems OrderItems[]
+  Reviews Reviews[]
 
-  @@map("Medicines")
+  @@map("Medicines") 
 }
 
+//table orders 3
+model Orders {
+  id String @id @default(uuid())
+  totalAmount Float @map("total_amount")
+  status OrderStatus @default(PENDING)
+
+  customerId String @map("customer_id") //better auth 
+
+  
+
+  orderItems  OrderItems[]
+  createdAt   DateTime    @default(now()) @map("created_at")
+
+  @@map("Orders")
+}
+
+//table orders items 4
+model OrderItems{
+  id         String    @id @default(uuid())
+
+  orderId    String    @map("order_id")
+  order      Orders    @relation(fields: [orderId], references: [id])
+
+  medicineId String    @map("medicine_id")
+  medicine   Medicines @relation(fields: [medicineId],references: [id])
+
+  quantity   Int
+  unitPrice  Float     @map("unit_price")
+
+
+ @@map("OrderItems")
+}
+
+model Reviews{
+  id String @id @default(uuid())
+  rating Int @default(0)
+  comment String?
+
+  userId     String    @map("user_id")
+
+  medicineId String    @map("medicine_id")
+  medicine   Medicines @relation(fields: [medicineId], references: [id])
+
+@@map("Reviews")
+}
+
+
+
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
