@@ -17,10 +17,11 @@ datasource db {
 
 
  
-model Post {
-  id        Int     @id @default(autoincrement())
-  title     String
-  content   String?
-  published Boolean @default(false)
-   authorId  Int
+model Categories {
+  id          String      @id @default(uuid())
+  name        String      @unique
+  description String?
+
+  @@map("Categories")
 }
+
