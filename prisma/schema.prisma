@@ -16,12 +16,35 @@ datasource db {
 
 
 
- 
+
+
+ // ২. Categories Table
 model Categories {
   id          String      @id @default(uuid())
   name        String      @unique
   description String?
+  medicines   Medicines[]
 
   @@map("Categories")
+}
+
+// ৩. Medicines Table
+model Medicines {
+  id          String   @id @default(uuid())
+  name        String
+  genericName String?  @map("generic_name")
+  price       Float
+  stock       Int      @default(0)
+  expiryDate  DateTime @map("expiry_date")
+  
+  // Foreign Keys
+  categoryId  String   @map("category_id")
+  sellerId    String   @map("seller_id")
+
+  // Relations
+  category    Categories @relation(fields: [categoryId], references: [id])
+ 
+
+  @@map("Medicines")
 }
 
