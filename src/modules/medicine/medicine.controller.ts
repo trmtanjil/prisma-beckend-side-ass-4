@@ -35,7 +35,23 @@ try {
   }
 }
 
+const getSinglMedicine = async (req:Request,res:Response)=>{
+    try {
+        const {id}= req.params
+     const result = await medicineService.getSinglMedicine(id as string);
 
+    res.status(200).json({
+      success: true,
+      message: "single Medicines fetched successfully",
+      data: result,
+    });
+  } catch (error: any) {
+    res.status(400).json({
+      success: false,
+      message: error || "Failed to fetch single medicines",
+    });
+  }
+}
 
 
 const updateMedicine = async (req:Request, res:Response)=>{
@@ -83,6 +99,7 @@ try{
 export const medicineController ={
 createMedicine,
 getAllMedicine,
+getSinglMedicine,
 updateMedicine,
 deleteMedicine
 }

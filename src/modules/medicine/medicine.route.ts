@@ -14,6 +14,10 @@ router.get(
   "/",
    medicineController.getAllMedicine
 );
+router.get(
+  "/:id",
+   medicineController.getSinglMedicine
+);
 router.patch(
   "/:id",
    medicineController.updateMedicine

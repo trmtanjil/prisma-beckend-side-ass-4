@@ -42,6 +42,18 @@ const getAllMedicines = async () => {
   return result;
 };
 
+const getSinglMedicine = async (medicineId:string) => {
+  const result = await prisma.medicines.findUniqueOrThrow({
+   where:{
+    id:medicineId
+   },
+   include: {
+        category: true,
+    }
+  });
+  return result;
+};
+
 const updateMedicine = async (
   medicineId: string,
   data: Partial<Medicines>,
@@ -93,6 +105,7 @@ const deleteMedicine= async(medicineId: string, sellerId: string,isSeller:boolea
 export const medicineService = {
     createMedicine,
     getAllMedicines,
+    getSinglMedicine,
     updateMedicine,
     deleteMedicine,
 }
