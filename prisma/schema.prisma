@@ -126,6 +126,10 @@ model User {
   sessions      Session[]
   accounts      Account[]
 
+  role   UserRole @default(CUSTOMER)
+  phone  String?
+  status String? @default("ACTIVE")
+
   @@unique([email])
   @@map("user")
 }
@@ -176,4 +180,11 @@ model Verification {
 
   @@index([identifier])
   @@map("verification")
+}
+
+
+enum UserRole {
+  ADMIN
+  SELLER
+  CUSTOMER
 }
