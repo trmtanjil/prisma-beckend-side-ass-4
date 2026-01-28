@@ -13,104 +13,99 @@ datasource db {
   provider = "postgresql"
 }
 
-
-
-
 //table cetegory 1
+
 model Category {
-  id String @id @default(uuid())
-  name String @unique
-  description String ?
+  id          String  @id @default(uuid())
+  name        String  @unique
+  description String?
 
   Medicines Medicines[]
 
-    createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@map("Categories")
- }
+}
 
 //table medicienes 2
-model Medicines{
-  id String @id @default(uuid())
-  name String
-  price Float
-  stock Int @default(0)
+
+model Medicines {
+  id         String   @id @default(uuid())
+  name       String
+  price      Float
+  stock      Int      @default(0)
   expiryDate DateTime @map("expiry_date")
 
   //foraign key
-  categoryId String @map("categoryId")
-  category Category @relation(fields: [categoryId],references: [id])
-
+  categoryId String   @map("categoryId")
+  category   Category @relation(fields: [categoryId], references: [id])
 
   // Better Auth  theke asche 
-  sellerId    String   @map("seller_id")
+  sellerId String @map("seller_id")
 
   //relation ship 
   OrderItems OrderItems[]
-  Reviews Reviews[]
+  Reviews    Reviews[]
 
-    createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  @@map("Medicines") 
+  @@map("Medicines")
 }
 
 //table orders 3
+
 model Orders {
-  id String @id @default(uuid())
-  totalAmount Float @map("total_amount")
-  status OrderStatus @default(PENDING)
+  id          String      @id @default(uuid())
+  totalAmount Float       @map("total_amount")
+  status      OrderStatus @default(PENDING)
 
   customerId String @map("customer_id") //better auth 
 
-  
+  orderItems OrderItems[]
 
-  orderItems  OrderItems[]
-
-    createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@map("Orders")
 }
 
 //table orders items 4
-model OrderItems{
-  id         String    @id @default(uuid())
 
-  orderId    String    @map("order_id")
-  order      Orders    @relation(fields: [orderId], references: [id])
-
-  medicineId String    @map("medicine_id")
-  medicine   Medicines @relation(fields: [medicineId],references: [id])
-
-  quantity   Int
-  unitPrice  Float     @map("unit_price")
-
-  createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
-
- @@map("OrderItems")
-}
-
-model Reviews{
+model OrderItems {
   id String @id @default(uuid())
-  rating Int @default(0)
-  comment String?
 
-  userId     String    @map("user_id")
+  orderId String @map("order_id")
+  order   Orders @relation(fields: [orderId], references: [id])
 
   medicineId String    @map("medicine_id")
   medicine   Medicines @relation(fields: [medicineId], references: [id])
 
-    createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
+  quantity  Int
+  unitPrice Float @map("unit_price")
 
-@@map("Reviews")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("OrderItems")
 }
 
+model Reviews {
+  id      String  @id @default(uuid())
+  rating  Int     @default(0)
+  comment String?
 
+  userId String @map("user_id")
 
+  medicineId String    @map("medicine_id")
+  medicine   Medicines @relation(fields: [medicineId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("Reviews")
+}
 
 enum OrderStatus {
   PENDING
@@ -118,4 +113,67 @@ enum OrderStatus {
   SHIPPED
   DELIVERED
   CANCELLED
+}
+
+model User {
+  id            String    @id
+  name          String
+  email         String
+  emailVerified Boolean   @default(false)
+  image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  sessions      Session[]
+  accounts      Account[]
+
+  @@unique([email])
+  @@map("user")
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([token])
+  @@index([userId])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@index([userId])
+  @@map("account")
+}
+
+model Verification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([identifier])
+  @@map("verification")
 }
