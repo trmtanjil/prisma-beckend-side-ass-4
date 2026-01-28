@@ -8,5 +8,8 @@ router.post(
     "/",medicineController.createMedicine
 )
 
+router.get(
+    "/",medicineController.updateMedicine
+)
 
 export const medicineRouter:Router = router

@@ -15,6 +15,19 @@ try{
 }
 
 
+const updateMedicine = async (req:Request, res:Response)=>{
+    try{
+        const result = await medicineService.updateMedicine
+        
+    }catch(error){
+        res.status(400).json({
+              error:"medicine update faild",
+        message:error
+        })
+    }
+}
+
 export const medicineController ={
-createMedicine
+createMedicine,
+updateMedicine
 }

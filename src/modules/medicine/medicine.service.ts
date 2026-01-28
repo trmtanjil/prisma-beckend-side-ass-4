@@ -28,7 +28,27 @@ const createMedicine = async (payload:IMedicinePayload)=>{
 
 }
 
+const updateMedicine = async (medicineId:string,data:Partial<Medicines>,sellerId:string,isSeller:boolean)=>{
+  const medicineData = await prisma.medicines.findUniqueOrThrow({
+    where:{
+      id:medicineId
+    }
+  })
+   if(!isSeller && (medicineData.sellerId!==sellerId)){
+        throw new Error("you are the not /owner of ther creation post")
+    }
+
+    const result = await prisma.medicines.update({
+      where:{
+        id:medicineData.id
+      },
+      data
+    })
+    return result
+
+}
 
 export const medicineService = {
-    createMedicine
+    createMedicine,
+    updateMedicine
 }

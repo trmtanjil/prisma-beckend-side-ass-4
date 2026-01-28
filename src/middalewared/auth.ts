@@ -1,0 +1,72 @@
+import { NextFunction, Request, Response } from "express";
+import {auth as betterAuth} from "../lib/auth"
+
+// type for role 
+export enum UserRole{
+    USER="CUTOMER",
+    SELLER="SELLER",
+    ADMIN="ADMIN"
+}
+
+
+declare global{
+    namespace Express{
+        interface Request{
+            user?:{
+                id:string,
+                email:string,
+                name:string,
+                role:string,
+                emailVerified:boolean;
+            }
+        }
+    }
+}
+
+const auth =(...roles:UserRole[])=>{
+return async (req:Request,res:Response,next:NextFunction)=>{
+    // console.log(req.headers)
+   try{
+ //get session
+    const session = await betterAuth.api.getSession({
+        headers:req.headers as any 
+    })
+
+    if(!session){
+        return res.status(401).json({
+            success:false,
+            message:"you are not authorised!"
+        })
+    }
+
+    if(!session.user.emailVerified){
+        return res.status(403).json({
+            success:false,
+            message:"email varification required Please verify your email"
+        })
+    }
+
+    req.user={
+        id:session.user.id,
+        email:session.user.email,
+        name:session.user.name,
+        role:session.user.role as string,
+        emailVerified:session.user.emailVerified
+    }
+
+
+    if(roles.length && !roles.includes(req.user.role as UserRole)){
+        return res.status(403).json({
+            success:false,
+            message:"Forbidden! you don't have permission to access this resurces!"
+        })
+    }
+
+    next()
+   }catch(err){
+    next(err)
+   }
+}
+}
+
+export default auth;
