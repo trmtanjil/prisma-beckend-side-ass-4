@@ -32,14 +32,13 @@ const updateMedicine = async (
   medicineId: string,
   data: Partial<Medicines>,
   userId: string,
-  isAdmin: boolean
+  isSeller: boolean
 ) => {
   const medicineData = await prisma.medicines.findUniqueOrThrow({
     where: { id: medicineId }
   });
 
-  // লজিক: যদি ইউজার ADMIN না হয় এবং সে এই ওষুধের সেলারও না হয়, তবেই বাধা দাও
-  if (!isAdmin && medicineData.sellerId !== userId) {
+   if (!isSeller && medicineData.sellerId !== userId) {
     throw new Error("You are not the owner of this medicine post");
   }
 
@@ -51,7 +50,34 @@ const updateMedicine = async (
   return result;
 };
 
+const deleteMedicine= async(medicineId: string, sellerId: string,isSeller:boolean)=>{
+ 
+  const medicineData = await prisma.medicines.findUnique({
+    where:{
+      id:medicineId 
+    },
+    select: { 
+        id: true, 
+      sellerId: true 
+    },
+  })
+  if (!medicineData) {
+    throw new Error("Medicine not found!");
+  }
+ if (medicineData.sellerId !== sellerId) {
+    throw new Error("You can only delete your own medicines!");
+  }
+  if(!isSeller && (medicineData.sellerId !==sellerId)){
+        throw new Error("you are the not /owner of ther creation post")
+    }
+   const result = await prisma.medicines.delete({
+    where: { id: medicineId },
+  });
+    return result
+}
+
 export const medicineService = {
     createMedicine,
-    updateMedicine
+    updateMedicine,
+    deleteMedicine
 }

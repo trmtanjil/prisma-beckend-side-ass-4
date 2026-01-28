@@ -16,5 +16,11 @@ router.patch(
   auth(UserRole.SELLER),
   medicineController.updateMedicine
 );
+//delete medicine
+router.delete(
+  "/:medicineId",
+  auth(UserRole.SELLER,UserRole.ADMIN),
+  medicineController.deleteMedicine
+);
 
 export const medicineRouter:Router = router
