@@ -24,6 +24,9 @@ model Category {
 
   Medicines Medicines[]
 
+    createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+
   @@map("Categories")
  }
 
@@ -47,6 +50,9 @@ model Medicines{
   OrderItems OrderItems[]
   Reviews Reviews[]
 
+    createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+
   @@map("Medicines") 
 }
 
@@ -61,7 +67,9 @@ model Orders {
   
 
   orderItems  OrderItems[]
-  createdAt   DateTime    @default(now()) @map("created_at")
+
+    createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
 
   @@map("Orders")
 }
@@ -79,6 +87,8 @@ model OrderItems{
   quantity   Int
   unitPrice  Float     @map("unit_price")
 
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
 
  @@map("OrderItems")
 }
@@ -92,6 +102,9 @@ model Reviews{
 
   medicineId String    @map("medicine_id")
   medicine   Medicines @relation(fields: [medicineId], references: [id])
+
+    createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
 
 @@map("Reviews")
 }
