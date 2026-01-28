@@ -1,15 +1,20 @@
 import express, { Router } from "express";
 import { medicineController } from "./medicine.controller";
-
+import auth, { UserRole } from "../../middalewared/auth";
+ 
 
 const router:Router = express.Router()
 
 router.post(
-    "/",medicineController.createMedicine
-)
+  "/",
+  auth(UserRole.SELLER), // create medicine only seller
+  medicineController.createMedicine
+);
 
-router.get(
-    "/",medicineController.updateMedicine
-)
+router.patch(
+  "/:medicineId",
+  auth(UserRole.SELLER),
+  medicineController.updateMedicine
+);
 
 export const medicineRouter:Router = router

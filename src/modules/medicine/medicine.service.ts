@@ -28,25 +28,28 @@ const createMedicine = async (payload:IMedicinePayload)=>{
 
 }
 
-const updateMedicine = async (medicineId:string,data:Partial<Medicines>,sellerId:string,isSeller:boolean)=>{
+const updateMedicine = async (
+  medicineId: string,
+  data: Partial<Medicines>,
+  userId: string,
+  isAdmin: boolean
+) => {
   const medicineData = await prisma.medicines.findUniqueOrThrow({
-    where:{
-      id:medicineId
-    }
-  })
-   if(!isSeller && (medicineData.sellerId!==sellerId)){
-        throw new Error("you are the not /owner of ther creation post")
-    }
+    where: { id: medicineId }
+  });
 
-    const result = await prisma.medicines.update({
-      where:{
-        id:medicineData.id
-      },
-      data
-    })
-    return result
+  // লজিক: যদি ইউজার ADMIN না হয় এবং সে এই ওষুধের সেলারও না হয়, তবেই বাধা দাও
+  if (!isAdmin && medicineData.sellerId !== userId) {
+    throw new Error("You are not the owner of this medicine post");
+  }
 
-}
+  const result = await prisma.medicines.update({
+    where: { id: medicineId },
+    data
+  });
+  
+  return result;
+};
 
 export const medicineService = {
     createMedicine,

@@ -3,7 +3,7 @@ import {auth as betterAuth} from "../lib/auth"
 
 // type for role 
 export enum UserRole{
-    USER="CUTOMER",
+    USER="CUSTOMER",
     SELLER="SELLER",
     ADMIN="ADMIN"
 }
@@ -39,12 +39,12 @@ return async (req:Request,res:Response,next:NextFunction)=>{
         })
     }
 
-    if(!session.user.emailVerified){
-        return res.status(403).json({
-            success:false,
-            message:"email varification required Please verify your email"
-        })
-    }
+    // if(!session.user.emailVerified){
+    //     return res.status(403).json({
+    //         success:false,
+    //         message:"email varification required Please verify your email"
+    //     })
+    // }
 
     req.user={
         id:session.user.id,
