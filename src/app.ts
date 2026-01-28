@@ -22,7 +22,7 @@ app.use("/api/auth",authRoutes)
 app.all("/api/auth/*splat", toNodeHandler(auth));
 
 
-app.use("/category",categoryRouter)
+app.use("/api/categories",categoryRouter)
 
 //medicine operation 
 app.use("/api/seller/medicines",medicineRouter)
