@@ -28,6 +28,20 @@ const createMedicine = async (payload:IMedicinePayload)=>{
 
 }
 
+
+const getAllMedicines = async () => {
+  const result = await prisma.medicines.findMany({
+   
+    include: {
+      category: true,  
+    },
+    orderBy: {
+      createdAt: 'desc'  
+    }
+  });
+  return result;
+};
+
 const updateMedicine = async (
   medicineId: string,
   data: Partial<Medicines>,
@@ -78,6 +92,7 @@ const deleteMedicine= async(medicineId: string, sellerId: string,isSeller:boolea
 
 export const medicineService = {
     createMedicine,
+    getAllMedicines,
     updateMedicine,
-    deleteMedicine
+    deleteMedicine,
 }

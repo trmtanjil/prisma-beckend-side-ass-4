@@ -27,6 +27,8 @@ app.use("/category",categoryRouter)
 //medicine operation 
 app.use("/api/seller/medicines",medicineRouter)
 
+//medicine get public
+app.use("/api/medicines",medicineRouter)
 
 
 

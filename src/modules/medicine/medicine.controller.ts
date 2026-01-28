@@ -18,6 +18,25 @@ try{
 }
 }
 
+const getAllMedicine=async(req:Request,res:Response)=>{
+try {
+    const result = await medicineService.getAllMedicines();
+
+    res.status(200).json({
+      success: true,
+      message: "Medicines fetched successfully",
+      data: result,
+    });
+  } catch (error: any) {
+    res.status(400).json({
+      success: false,
+      message: error.message || "Failed to fetch medicines",
+    });
+  }
+}
+
+
+
 
 const updateMedicine = async (req:Request, res:Response)=>{
     try{
@@ -63,6 +82,7 @@ try{
 
 export const medicineController ={
 createMedicine,
+getAllMedicine,
 updateMedicine,
 deleteMedicine
 }

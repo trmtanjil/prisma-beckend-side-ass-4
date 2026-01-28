@@ -10,7 +10,14 @@ router.post(
   auth(UserRole.SELLER), // create medicine only seller
   medicineController.createMedicine
 );
-
+router.get(
+  "/",
+   medicineController.getAllMedicine
+);
+router.patch(
+  "/:id",
+   medicineController.updateMedicine
+);
 router.patch(
   "/:medicineId",
   auth(UserRole.SELLER),
