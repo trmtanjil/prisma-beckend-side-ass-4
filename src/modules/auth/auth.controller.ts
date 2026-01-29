@@ -47,6 +47,8 @@ const logout = async (req: Request, res: Response) => {
     });
   }
 };
+
+
 export const authController = {
   getMe,
   logout

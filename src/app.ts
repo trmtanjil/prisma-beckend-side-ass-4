@@ -7,6 +7,7 @@ import { auth } from "./lib/auth";
 import cors from 'cors';
 import { authRoutes } from "./modules/auth/auth.route";
 import { orderRouter } from "./modules/order/order.route";
+import { userRouter } from "./modules/user/user.route";
 const app: Application = express();
 
 
@@ -36,6 +37,9 @@ app.use("/api/order",orderRouter)
 
 // /api/seller/orders seller order get 
 app.use("/api/seller/orders",orderRouter)
+
+//all user get admi 
+app.use("/api/admin", userRouter);
 
 app.get("/",(req,res)=>{
     res.send('hlw world')
