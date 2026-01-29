@@ -70,11 +70,18 @@ const getAllOrder =async()=>{
     return result
 }
 
+const getSingleOrder =async(orderId:string)=>{
+    const result = prisma.orders.findUnique({
+         where:{id:orderId}
+    })
+    return result
+}
 
 
 
 
 export const orderservice ={
 createOrder,
-getAllOrder
+getAllOrder,
+getSingleOrder
 }
