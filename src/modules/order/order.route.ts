@@ -11,5 +11,9 @@ router.post(
       auth(UserRole.SELLER,UserRole.CUSTOMER),
     orderController.createOrder
 )
+router.get(
+    "/",
+     orderController.getAllOrder
+)
 
 export const orderRouter:Router = router

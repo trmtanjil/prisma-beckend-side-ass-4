@@ -61,12 +61,20 @@ const createOrder = async (userId: string, payload: OrderPayload)=>{
 }
 
 
-
+const getAllOrder =async()=>{
+    const result = prisma.orders.findMany({
+          orderBy: {
+      createdAt: 'desc'  
+    }
+    })
+    return result
+}
 
 
 
 
 
 export const orderservice ={
-createOrder
+createOrder,
+getAllOrder
 }
