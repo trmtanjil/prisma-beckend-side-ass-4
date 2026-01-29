@@ -20,7 +20,7 @@ const getAllUsers = async () => {
 
 const updateUserStatus=async (
     userId:string, 
-    payload: any
+    payload: UserRole
 
 
     )=>{
