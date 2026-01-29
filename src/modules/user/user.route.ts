@@ -10,4 +10,10 @@ router.get(
   auth(UserRole.ADMIN), // শুধুমাত্র অ্যাডমিন এক্সেস পাবে
   userController.getAllUsers
 );
+
+router.patch(
+  "/:id", 
+  auth(UserRole.ADMIN), // শুধুমাত্র অ্যাডমিন এক্সেস পাবে
+  userController.updateUserStatus
+);
 export const userRouter:Router = router

@@ -41,6 +41,7 @@ app.use("/api/seller/orders",orderRouter)
 //all user get admi 
 app.use("/api/admin", userRouter);
 
+
 app.get("/",(req,res)=>{
     res.send('hlw world')
 })
