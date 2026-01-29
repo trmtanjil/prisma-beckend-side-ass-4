@@ -1,3 +1,4 @@
+import { number } from "better-auth";
 import { Medicines } from "../../../generated/prisma/client";
 import { prisma } from "../../lib/prisma";
 
@@ -6,8 +7,8 @@ interface IMedicinePayload{
 name: string;
   price: number;
   stock: number;
-  expiryDate: string | Date; // ফ্রন্টএন্ড থেকে স্ট্রিং আসতে পারে
-  categoryId: string;        // ক্যাটাগরি টেবিলের ID
+  expiryDate: string | Date; 
+  categoryId: string;       
   sellerId: string;
 }
 
@@ -29,9 +30,20 @@ const createMedicine = async (payload:IMedicinePayload)=>{
 }
 
 
-const getAllMedicines = async () => {
+const getAllMedicines = async (minPrice?:number,maxPrice?:number) => {
+
+  const whereCondition :any={
+    isDelete:false
+  }
+  if(minPrice !==undefined || maxPrice!==undefined){
+    whereCondition.price={
+      gte:minPrice || 0,
+      lte:maxPrice || 10000000,
+    }
+  }
+
   const result = await prisma.medicines.findMany({
-   
+   where:whereCondition,
     include: {
       category: true,  
     },

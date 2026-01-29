@@ -20,7 +20,11 @@ try{
 
 const getAllMedicine=async(req:Request,res:Response)=>{
 try {
-    const result = await medicineService.getAllMedicines();
+  const {minPrice, maxPrice }= req.query
+    const result = await medicineService.getAllMedicines(
+      minPrice? Number(minPrice):undefined,
+      maxPrice ? Number(maxPrice):undefined
+    );
 
     res.status(200).json({
       success: true,
