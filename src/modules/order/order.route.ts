@@ -19,9 +19,17 @@ router.get(
     "/:id",
      orderController.getSingleOrder
 )
+// /api/seller/orders
 router.get(
-    "/",
-     orderController.getSellerOrders
-)
+  "/", 
+  auth(UserRole.SELLER), 
+  orderController.getSellerOrders
+);
+
+router.patch(
+  "/:id",
+  auth(UserRole.SELLER),
+  orderController.updateOrderStatus
+);
 
 export const orderRouter:Router = router

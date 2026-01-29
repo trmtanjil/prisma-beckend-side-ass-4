@@ -76,31 +76,41 @@ const updateMedicine = async (
   return result;
 };
 
-const deleteMedicine= async(medicineId: string, sellerId: string,isSeller:boolean)=>{
- 
+const deleteMedicine = async (
+  medicineId: string,
+  sellerId: string,
+  isSeller: boolean
+) => {
+  if (!medicineId) {
+    throw new Error("Medicine id missing");
+  }
+
   const medicineData = await prisma.medicines.findUnique({
-    where:{
-      id:medicineId 
+    where: {
+      id: medicineId,
     },
-    select: { 
-        id: true, 
-      sellerId: true 
+    select: {
+      id: true,
+      sellerId: true,
     },
-  })
+  });
+
   if (!medicineData) {
     throw new Error("Medicine not found!");
   }
- if (medicineData.sellerId !== sellerId) {
-    throw new Error("You can only delete your own medicines!");
-  }
-  if(!isSeller && (medicineData.sellerId !==sellerId)){
-        throw new Error("you are the not /owner of ther creation post")
-    }
-   const result = await prisma.medicines.delete({
-    where: { id: medicineId },
+
+  // if (!isSeller || medicineData.sellerId !== sellerId) {
+  //   throw new Error("You can only delete your own medicines!");
+  // }
+
+  const result = await prisma.medicines.delete({
+    where: {
+      id: medicineId,
+    },
   });
-    return result
-}
+
+  return result;
+};
 
 export const medicineService = {
     createMedicine,

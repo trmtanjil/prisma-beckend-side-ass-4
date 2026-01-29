@@ -1,3 +1,4 @@
+import { OrderStatus } from "../../../generated/prisma/enums";
 import { prisma } from "../../lib/prisma";
 
 
@@ -78,41 +79,78 @@ const getSingleOrder =async(orderId:string)=>{
 }
 
 
-const getSellerOrders = async (sellerId:string)=>{
-    const orders = await prisma.orders.findMany({
-        where:{
-            orderItems:{
-                some:{
-                    medicine:{
-                        sellerId
-                    }
-                }
-            }
+const getSellerOrders = async (sellerId: string) => {
+  return await prisma.orders.findMany({
+    where: {
+      orderItems: {
+        some: {
+          medicine: {
+            sellerId: sellerId,
+          },
         },
-        include:{
-           orderItems:{
-            where:{
-                medicine:{
-                    sellerId
-                }
-            },
-            include:{
-                medicine:true
-            }
-           }
+      },
+    },
+    include: {
+      orderItems: {
+        where: {
+          medicine: {
+            sellerId: sellerId,
+          },
         },
-        orderBy:{
-            createdAt:"desc"
-        }
-    });
-    return orders
-}
+        include: {
+          medicine: true,
+        },
+      },
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+};
 
+
+const updateOrderStatus = async (
+  orderId: string,
+  sellerId: string,
+  status: OrderStatus 
+) => {
+ // Check order exists & belongs to seller
+  const order = await prisma.orders.findFirst({
+    where: {
+      id: orderId,
+      orderItems: {
+        some: {
+          medicine: {
+            sellerId,
+          },
+        },
+      },
+    },
+  });
+  console.log(order)
+
+  // if (!order) {
+  //   throw new Error("Order not found or not authorized");
+  // }
+
+  // Update order status
+  const updatedOrder = await prisma.orders.update({
+    where: {
+      id: orderId,
+    },
+    data: {
+      status,
+    },
+  });
+
+  return updatedOrder;
+};
 
 
 export const orderservice ={
 createOrder,
 getAllOrder,
 getSingleOrder,
-getSellerOrders
+getSellerOrders,
+updateOrderStatus
 }

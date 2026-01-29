@@ -18,18 +18,21 @@ router.get(
   "/:id",
    medicineController.getSinglMedicine
 );
-router.patch(
-  "/:id",
-   medicineController.updateMedicine
-);
+// router.patch(
+//   "/:id",
+//    medicineController.getSinglMedicine
+// );
 router.patch(
   "/:medicineId",
   auth(UserRole.SELLER),
   medicineController.updateMedicine
 );
+
+
+
 //delete medicine
 router.delete(
-  "/:medicineId",
+  "/:id",
   auth(UserRole.SELLER,UserRole.ADMIN),
   medicineController.deleteMedicine
 );

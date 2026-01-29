@@ -57,7 +57,7 @@ const getSinglMedicine = async (req:Request,res:Response)=>{
 const updateMedicine = async (req:Request, res:Response)=>{
     try{
          const user= req.user
-        //  console.log("user",user)
+         console.log("user",user)
            if(!user){
       throw new Error("you are unauthorized ")
     }
@@ -74,27 +74,38 @@ const updateMedicine = async (req:Request, res:Response)=>{
     }
 }
 
-const deleteMedicine = async (req:Request,res:Response )=>{
-try{
-     const { medicineId  } = req.params; 
-    const user = req.user;    
-    const isSeller = user?.role===UserRole.SELLER;
-       const result = await medicineService.deleteMedicine(medicineId as string, user?.id as string,isSeller);
+const deleteMedicine = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
 
-      res.status(200).json({
+    if (!id) {
+      return res.status(400).json({
+        success: false,
+        message: "Medicine id is required",
+      });
+    }
+
+    const user = req.user!;
+    const isSeller = user.role === UserRole.SELLER;
+
+    const result = await medicineService.deleteMedicine(
+      id as string,
+      user.id,
+      isSeller
+    );
+
+    res.status(200).json({
       success: true,
       message: "Medicine removed successfully",
       data: result,
     });
-
-
-}catch(error){
+  } catch (error: any) {
     res.status(400).json({
-        error:"medicine delete faild",
-        message:error
-    })
-}
-}
+      success: false,
+      message: error.message || "Medicine delete failed",
+    });
+  }
+};
 
 export const medicineController ={
 createMedicine,
