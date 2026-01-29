@@ -78,10 +78,41 @@ const getSingleOrder =async(orderId:string)=>{
 }
 
 
+const getSellerOrders = async (sellerId:string)=>{
+    const orders = await prisma.orders.findMany({
+        where:{
+            orderItems:{
+                some:{
+                    medicine:{
+                        sellerId
+                    }
+                }
+            }
+        },
+        include:{
+           orderItems:{
+            where:{
+                medicine:{
+                    sellerId
+                }
+            },
+            include:{
+                medicine:true
+            }
+           }
+        },
+        orderBy:{
+            createdAt:"desc"
+        }
+    });
+    return orders
+}
+
 
 
 export const orderservice ={
 createOrder,
 getAllOrder,
-getSingleOrder
+getSingleOrder,
+getSellerOrders
 }

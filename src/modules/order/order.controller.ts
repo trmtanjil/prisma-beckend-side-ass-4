@@ -56,9 +56,29 @@ const getSingleOrder = async (req:Request, res:Response)=>{
 }
 
 
+const getSellerOrders = async (req:Request, res:Response)=>{
+    try{
+       const user = req.user
+        const result = await orderservice.getSingleOrder(user?.id as string)
+
+         res.status(200).json({
+      success: true,
+      message: "Seller orders fetched successfully",
+      data: result,
+    });
+    }catch(error){
+          res.status(400).json({
+        error:"Failed to fetch seller orders",
+        message:error
+    })
+    }
+}
+
+
 
 export const orderController={
 createOrder,
 getAllOrder,
-getSingleOrder
+getSingleOrder,
+getSellerOrders
 }

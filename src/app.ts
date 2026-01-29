@@ -34,6 +34,8 @@ app.use("/api/medicines",medicineRouter)
 //ordre route poing 
 app.use("/api/order",orderRouter)
 
+// /api/seller/orders seller order get 
+app.use("/api/seller/orders",orderRouter)
 
 app.get("/",(req,res)=>{
     res.send('hlw world')

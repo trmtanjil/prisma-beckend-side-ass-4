@@ -19,5 +19,9 @@ router.get(
     "/:id",
      orderController.getSingleOrder
 )
+router.get(
+    "/",
+     orderController.getSellerOrders
+)
 
 export const orderRouter:Router = router
