@@ -3,7 +3,7 @@ import {auth as betterAuth} from "../lib/auth"
 
 // type for role 
 export enum UserRole{
-    USER="CUSTOMER",
+    CUSTOMER="CUSTOMER",
     SELLER="SELLER",
     ADMIN="ADMIN"
 }
