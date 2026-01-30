@@ -21,7 +21,11 @@ const crateReviw = async (userId:string, payload:ReviewType)=>{
 }
 
 const getAllReviw = async ()=>{
-     const result = await prisma.reviews.findMany()
+     const result = await prisma.reviews.findMany({
+          orderBy: {
+      rating: "desc",  
+    },
+     })
     return result
 }
 
