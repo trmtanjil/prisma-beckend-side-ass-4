@@ -29,9 +29,34 @@ const getAllReviw = async ()=>{
     return result
 }
 
-const getSingReviw = async (medicinId :string)=>{
+const getSingReviw = async (reviewId :string)=>{
      const result = await prisma.reviews.findUnique({
-     where:{id:medicinId}
+     where:{id:reviewId}
+    })
+    return result
+}
+const updateReviw = async (
+    reviewId :string,
+    userId:string,
+    payload:{
+        comment:string;
+        rating:number;
+    }
+)=>{
+     const reviewData = await prisma.reviews.findUniqueOrThrow({
+     where:{id:reviewId}
+    })
+
+    // owner check 
+    if(reviewData.userId !== userId){
+        throw new Error("You can only update your own review");
+    }
+
+    const result = prisma.reviews.update({
+        where:{
+            id:reviewId
+        },
+        data :payload
     })
     return result
 }
@@ -39,5 +64,6 @@ const getSingReviw = async (medicinId :string)=>{
 export const reviewService ={
     crateReviw,
     getAllReviw,
-    getSingReviw
+    getSingReviw,
+    updateReviw
 }

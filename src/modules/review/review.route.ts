@@ -21,5 +21,10 @@ router.get(
      
      reviewController.getSinglRivew
 )
+router.patch(
+    "/:id",
+       auth(UserRole.CUSTOMER,UserRole.SELLER),
+     reviewController.updateRivew
+)
 
 export const reviewRouter:Router=router

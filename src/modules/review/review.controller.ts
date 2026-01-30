@@ -60,9 +60,29 @@ const getSinglRivew = async (req:Request, res:Response)=>{
         });
     }
 }
+const updateRivew = async (req:Request, res:Response)=>{
+   try{
+        
+  const  {id} = req.params
+  const user = req.user?.id
+        const result = await reviewService.updateReviw(id as string,user as string, req.body)
+        res.status(201).json({
+            success: true,
+            message: "Review created successfully",
+            data: result
+        });
+    }
+    catch(error){
+        res.status(400).json({
+            success: false,
+            message: error
+        });
+    }
+}
 
 export const reviewController = {
     crateReviw,
     getAllRivew,
-    getSinglRivew
+    getSinglRivew,
+    updateRivew
 }
