@@ -16,6 +16,10 @@ router.get(
      
      reviewController.getAllRivew
 )
-
+router.get(
+    "/:id",
+     
+     reviewController.getSinglRivew
+)
 
 export const reviewRouter:Router=router

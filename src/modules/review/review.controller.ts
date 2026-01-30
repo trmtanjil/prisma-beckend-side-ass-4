@@ -42,8 +42,27 @@ const getAllRivew = async (req:Request, res:Response)=>{
     }
 }
 
+const getSinglRivew = async (req:Request, res:Response)=>{
+   try{
+        
+  const  {id} = req.params
+        const result = await reviewService.getSingReviw(id as string )
+        res.status(201).json({
+            success: true,
+            message: "Review created successfully",
+            data: result
+        });
+    }
+    catch(error){
+        res.status(400).json({
+            success: false,
+            message: error
+        });
+    }
+}
 
 export const reviewController = {
     crateReviw,
-    getAllRivew
+    getAllRivew,
+    getSinglRivew
 }

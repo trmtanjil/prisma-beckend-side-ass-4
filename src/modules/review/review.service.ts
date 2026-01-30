@@ -29,8 +29,15 @@ const getAllReviw = async ()=>{
     return result
 }
 
+const getSingReviw = async (medicinId :string)=>{
+     const result = await prisma.reviews.findUnique({
+     where:{id:medicinId}
+    })
+    return result
+}
 
 export const reviewService ={
     crateReviw,
-    getAllReviw
+    getAllReviw,
+    getSingReviw
 }
