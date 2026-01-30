@@ -35,10 +35,10 @@ const createMedicine = async (req: Request, res: Response) => {
 
         // ইমেজ আপলোড লজিক (ধরে নিচ্ছি তুমি একটি uploadToCloudinary ইউটিলিটি ফাংশন লিখেছো)
         let imageUrl = null;
-        if (file) {
+        if (req.file) {
             // cloudinary এ আপলোড করে সিকিউর ইউআরএল নাও
             
-            const uploadResponse = await uploadOnCloudinary(file); 
+            const uploadResponse = await uploadOnCloudinary(req.file.path); 
             imageUrl = uploadResponse?.secure_url;
         }
 
