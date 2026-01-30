@@ -11,6 +11,11 @@ router.post(
      auth(UserRole.SELLER,UserRole.CUSTOMER),
      reviewController.crateReviw
 )
+router.get(
+    "/",
+     
+     reviewController.getAllRivew
+)
 
 
 export const reviewRouter:Router=router

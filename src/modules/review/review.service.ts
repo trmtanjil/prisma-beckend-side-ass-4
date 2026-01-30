@@ -20,8 +20,13 @@ const crateReviw = async (userId:string, payload:ReviewType)=>{
     return result
 }
 
+const getAllReviw = async ()=>{
+     const result = await prisma.reviews.findMany()
+    return result
+}
 
 
 export const reviewService ={
-    crateReviw
+    crateReviw,
+    getAllReviw
 }
