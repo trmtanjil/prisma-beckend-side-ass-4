@@ -37,6 +37,8 @@ model Medicines {
   stock      Int      @default(0)
   expiryDate DateTime @map("expiry_date")
 
+  image      String?  //  image url
+
   //foraign key
   categoryId String   @map("categoryId")
   category   Category @relation(fields: [categoryId], references: [id])

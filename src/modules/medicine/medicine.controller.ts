@@ -2,20 +2,72 @@ import { Request, Response } from "express";
 import { medicineService } from "./medicine.service";
 import { UserRole } from "../../middalewared/auth";
 import { boolean } from "better-auth";
+import { uploadOnCloudinary } from "../../utils/cloudinary";
 
 
-const createMedicine = async ( req:Request,res:Response)=>{
-try{
-     const user= req.user
- const result = await medicineService.createMedicine(req.body)
-  res.status(201).json(result)
-}catch(error){
-    res.status(400).json({
-        error:"medicine create faild",
-        message:error
-    })
+// const createMedicine = async ( req:Request,res:Response)=>{
+// try{
+//      const user= req.user
+//  const result = await medicineService.createMedicine(req.body)
+//   res.status(201).json(result)
+// }catch(error){
+//     res.status(400).json({
+//         error:"medicine create faild",
+//         message:error
+//     })
+// }
+// }
+
+
+
+
+
+
+
+
+
+
+const createMedicine = async (req: Request, res: Response) => {
+    try {
+        const file = req.file; // Multer এটি হ্যান্ডেল করবে
+        const medicineData = req.body; 
+        const user = req.user;
+
+        // ইমেজ আপলোড লজিক (ধরে নিচ্ছি তুমি একটি uploadToCloudinary ইউটিলিটি ফাংশন লিখেছো)
+        let imageUrl = null;
+        if (file) {
+            // cloudinary এ আপলোড করে সিকিউর ইউআরএল নাও
+            
+            const uploadResponse = await uploadOnCloudinary(file); 
+            imageUrl = uploadResponse.secure_url;
+        }
+
+        const result = await medicineService.createMedicine({
+            ...medicineData,
+            sellerId: user!.id,
+            image: imageUrl
+        });
+
+        res.status(201).json({
+            success: true,
+            data: result
+        });
+    } catch (error: any) {
+        res.status(400).json({
+            success: false,
+            message: error.message || "Medicine creation failed"
+        });
+    }
 }
-}
+
+
+
+
+
+
+
+
+
 
 const getAllMedicine=async(req:Request,res:Response)=>{
 try {

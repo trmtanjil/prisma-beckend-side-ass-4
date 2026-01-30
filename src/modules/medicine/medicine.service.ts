@@ -3,31 +3,75 @@ import { Medicines } from "../../../generated/prisma/client";
 import { prisma } from "../../lib/prisma";
 
 
-interface IMedicinePayload{
-name: string;
-  price: number;
-  stock: number;
-  expiryDate: string | Date; 
-  categoryId: string;       
-  sellerId: string;
-}
+// interface IMedicinePayload{
+// name: string;
+//   price: number;
+//   stock: number;
+//   expiryDate: string | Date; 
+//   categoryId: string;       
+//   sellerId: string;
+//   image:string
+  
+// }
 
-const createMedicine = async (payload:IMedicinePayload)=>{
+// const createMedicine = async (payload:IMedicinePayload)=>{
 
+//     const result = await prisma.medicines.create({
+//          data: {
+//       name: payload.name,
+//       price: payload.price,
+//       stock: payload.stock,
+//       // স্ট্রিং ডেটকে প্রিজমার জন্য উপযোগী অবজেক্টে রূপান্তর
+//       expiryDate: new Date(payload.expiryDate), 
+//       categoryId: payload.categoryId,
+//       sellerId: payload.sellerId,
+//       image: payload.image
+//     },
+//     })
+//     return result
+
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+const createMedicine = async (payload: any) => {
     const result = await prisma.medicines.create({
-         data: {
-      name: payload.name,
-      price: payload.price,
-      stock: payload.stock,
-      // স্ট্রিং ডেটকে প্রিজমার জন্য উপযোগী অবজেক্টে রূপান্তর
-      expiryDate: new Date(payload.expiryDate), 
-      categoryId: payload.categoryId,
-      sellerId: payload.sellerId,
-    },
-    })
-    return result
+        data: {
+            name: payload.name,
+            price: Number(payload.price), // FormData থেকে ডাটা এলে এগুলোকে Number করে নিতে হয়
+            stock: Number(payload.stock),
+            expiryDate: new Date(payload.expiryDate),
+            categoryId: payload.categoryId,
+            sellerId: payload.sellerId,
+            image: payload.image // ইমেজের URL এখানে সেভ হবে
+        },
+    });
+    return result;
+};
 
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 const getAllMedicines = async (minPrice?:number,maxPrice?:number) => {
