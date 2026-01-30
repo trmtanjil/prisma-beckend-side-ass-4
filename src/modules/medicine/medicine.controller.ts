@@ -7,7 +7,6 @@ import { boolean } from "better-auth";
 const createMedicine = async ( req:Request,res:Response)=>{
 try{
      const user= req.user
-         console.log("user",user)
  const result = await medicineService.createMedicine(req.body)
   res.status(201).json(result)
 }catch(error){
@@ -61,7 +60,6 @@ const getSinglMedicine = async (req:Request,res:Response)=>{
 const updateMedicine = async (req:Request, res:Response)=>{
     try{
          const user= req.user
-         console.log("user",user)
            if(!user){
       throw new Error("you are unauthorized ")
     }

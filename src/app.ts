@@ -8,6 +8,7 @@ import cors from 'cors';
 import { authRoutes } from "./modules/auth/auth.route";
 import { orderRouter } from "./modules/order/order.route";
 import { userRouter } from "./modules/user/user.route";
+import { reviewRouter } from "./modules/review/review.route";
 const app: Application = express();
 
 
@@ -41,6 +42,9 @@ app.use("/api/seller/orders",orderRouter)
 //all user get admi 
 app.use("/api/admin", userRouter);
 
+
+//reviw path 
+app.use("/api/create-review",reviewRouter)
 
 app.get("/",(req,res)=>{
     res.send('hlw world')

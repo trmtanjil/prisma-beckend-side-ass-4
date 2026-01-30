@@ -32,15 +32,14 @@ const createMedicine = async (payload:IMedicinePayload)=>{
 
 const getAllMedicines = async (minPrice?:number,maxPrice?:number) => {
 
-  const whereCondition :any={
-    isDelete:false
-  }
+  const whereCondition :any={ }
   if(minPrice !==undefined || maxPrice!==undefined){
     whereCondition.price={
       gte:minPrice || 0,
       lte:maxPrice || 10000000,
     }
   }
+  
 
   const result = await prisma.medicines.findMany({
    where:whereCondition,
@@ -54,7 +53,7 @@ const getAllMedicines = async (minPrice?:number,maxPrice?:number) => {
   return result;
 };
 
-const getSinglMedicine = async (medicineId:string) => {
+const getSinglMedicine = async (medicineId:string) => { 
   const result = await prisma.medicines.findUniqueOrThrow({
    where:{
     id:medicineId
