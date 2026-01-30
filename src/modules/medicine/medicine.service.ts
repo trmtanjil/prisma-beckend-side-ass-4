@@ -41,24 +41,33 @@ import { prisma } from "../../lib/prisma";
 
 
 
+interface IMedicinePayload{
+name: string;
+  price: string;
+  stock: string;
+  expiryDate: string | Date; 
+  categoryId: string;       
+  sellerId: string;
+  image:string
+  
+}
 
 
-
-const createMedicine = async (payload: any) => {
+const createMedicine = async (payload: IMedicinePayload) => {
+    // ডাটাবেসে সেভ করার আগে টাইপ কনভার্ট করে নাও
     const result = await prisma.medicines.create({
         data: {
             name: payload.name,
-            price: Number(payload.price), // FormData থেকে ডাটা এলে এগুলোকে Number করে নিতে হয়
-            stock: Number(payload.stock),
-            expiryDate: new Date(payload.expiryDate),
+            price: parseFloat(payload.price), // string কে number করো
+            stock: parseInt(payload.stock),   // string কে integer করো
+            expiryDate: new Date(payload.expiryDate), // ISO Date ফরম্যাট লাগবে (যেমন: 2026-10-10)
             categoryId: payload.categoryId,
-            sellerId: payload.sellerId,
-            image: payload.image // ইমেজের URL এখানে সেভ হবে
+            sellerId: payload.sellerId, // এটি নিশ্চিত করো controller থেকে আসছে
+            image: payload.image 
         },
     });
-    return result;
+    return result; 
 };
-
 
 
 

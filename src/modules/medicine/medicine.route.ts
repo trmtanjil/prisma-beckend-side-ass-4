@@ -9,7 +9,7 @@ const router:Router = express.Router()
 router.post(
   "/",
   auth(UserRole.SELLER), // create medicine only seller
-  upload.single("image"),
+  upload.single("File"),
   medicineController.createMedicine
 );
 router.get(

@@ -29,16 +29,14 @@ import { uploadOnCloudinary } from "../../utils/cloudinary";
 
 const createMedicine = async (req: Request, res: Response) => {
     try {
-        const file = req.file; // Multer এটি হ্যান্ডেল করবে
         const medicineData = req.body; 
-        const user = req.user;
+        const user = req.user; // নিশ্চিত হও auth middleware এটি দিচ্ছে
 
-        // ইমেজ আপলোড লজিক (ধরে নিচ্ছি তুমি একটি uploadToCloudinary ইউটিলিটি ফাংশন লিখেছো)
         let imageUrl = null;
+        // req.file চেক করো (Multer এটি ফাইল হিসেবে রিসিভ করে)
         if (req.file) {
-            // cloudinary এ আপলোড করে সিকিউর ইউআরএল নাও
-            
-            const uploadResponse = await uploadOnCloudinary(req.file.path); 
+            // তোমার utility ফাংশন অনুযায়ী path পাঠাও
+            const uploadResponse: any = await uploadOnCloudinary(req.file.path); 
             imageUrl = uploadResponse?.secure_url;
         }
 
