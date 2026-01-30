@@ -1,6 +1,7 @@
 import express, { Router } from "express";
 import { medicineController } from "./medicine.controller";
 import auth, { UserRole } from "../../middalewared/auth";
+import { upload } from "../../middalewared/multer.middleware";
  
 
 const router:Router = express.Router()
@@ -8,6 +9,7 @@ const router:Router = express.Router()
 router.post(
   "/",
   auth(UserRole.SELLER), // create medicine only seller
+  upload.single("image"),
   medicineController.createMedicine
 );
 router.get(

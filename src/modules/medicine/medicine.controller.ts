@@ -39,7 +39,7 @@ const createMedicine = async (req: Request, res: Response) => {
             // cloudinary এ আপলোড করে সিকিউর ইউআরএল নাও
             
             const uploadResponse = await uploadOnCloudinary(file); 
-            imageUrl = uploadResponse.secure_url;
+            imageUrl = uploadResponse?.secure_url;
         }
 
         const result = await medicineService.createMedicine({
