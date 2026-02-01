@@ -21,7 +21,16 @@ app.use(cors({
 
 app.use(express.json());
 //get current user
-app.all("/api/auth/{*splat}", toNodeHandler(auth));
+// Log auth-related requests to help debug state/callback issues
+app.use((req, res, next) => {
+  if (req.path.startsWith('/api/auth')) {
+    console.log('[Auth Debug] request:', req.method, req.path, 'query=', req.query);
+  }
+  next();
+});
+
+// Use a standard wildcard so Express matches callbacks and subroutes properly
+app.all("/api/auth/{*any}", toNodeHandler(auth));
 
 
 app.use("/api/authenticatoin",authRoutes)
