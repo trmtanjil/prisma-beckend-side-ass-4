@@ -24,8 +24,8 @@ app.use(express.json());
 app.all("/api/auth/{*splat}", toNodeHandler(auth));
 
 
+// app.use("/api/authenticatoin",authRoutes)
 app.use("/api/categories",categoryRouter)
-app.use("/api/auth",authRoutes)
 
 //medicine operation 
 app.use("/api/seller/medicines",medicineRouter)
