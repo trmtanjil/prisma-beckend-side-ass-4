@@ -1,4 +1,5 @@
 
+
 import express, { Request, Response } from "express"
 import { categoryRouter } from "./modules/category/category.route";
 import { medicineRouter } from "./modules/medicine/medicine.route";
@@ -12,6 +13,7 @@ import { userRouter } from "./modules/user/user.route";
 import { reviewRouter } from "./modules/review/review.route";
 
 const app = express();
+app.set("trust proxy", 1);
 
 app.use(cors({
     origin:process.env.APP_URL|| "http://localhost:3000",

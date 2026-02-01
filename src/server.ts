@@ -1,5 +1,6 @@
  import app from "./app";
 import { prisma } from "./lib/prisma";
+app.set("trust proxy", 1);
 
 const PORT = process.env.PORT || 5000;
 
