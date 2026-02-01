@@ -19,6 +19,7 @@
     "@types/express": "^5.0.6",
     "@types/multer": "^2.0.0",
     "@types/node": "^25.0.10",
+    "@types/nodemailer": "^7.0.9",
     "prisma": "^7.3.0",
     "tsup": "^8.5.1",
     "tsx": "^4.21.0",
