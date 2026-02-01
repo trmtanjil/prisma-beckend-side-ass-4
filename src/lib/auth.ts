@@ -3,12 +3,16 @@ import { prismaAdapter } from "better-auth/adapters/prisma";
 import { prisma } from "./prisma";
 // If your Prisma file is located elsewhere, you can change the path
  
- 
+ if (!process.env.APP_URL) {
+  throw new Error("APP_URL is missing");
+}
+
 export const auth = betterAuth({
     database: prismaAdapter(prisma, {
         provider: "postgresql", // or "mysql", "postgresql", ...etc
     }),
-        trustedOrigins:[process.env.APP_URL!],
+    
+        trustedOrigins:[process.env.APP_URL], //chenge
        user:{
       additionalFields:{
         role:{
