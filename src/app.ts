@@ -9,8 +9,8 @@ import { authRoutes } from "./modules/auth/auth.route";
 import { orderRouter } from "./modules/order/order.route";
 import { userRouter } from "./modules/user/user.route";
 import { reviewRouter } from "./modules/review/review.route";
-const app = express();
 
+const app = express();
 
 app.use(cors({
     origin:process.env.APP_URL|| "http://localhost:3000",
