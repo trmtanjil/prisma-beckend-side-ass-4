@@ -2,7 +2,7 @@ import { prisma } from "../../lib/prisma"
 
 
 
-interface ReviewType {
+interface ReviewType{
     medicineId: string;
     comment: string;
     rating: number;
