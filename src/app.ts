@@ -21,11 +21,11 @@ app.use(cors({
 
 app.use(express.json());
 //get current user
-app.use("/api/auth",authRoutes)
 app.all("/api/auth/{*splat}", toNodeHandler(auth));
 
 
 app.use("/api/categories",categoryRouter)
+app.use("/api/auth",authRoutes)
 
 //medicine operation 
 app.use("/api/seller/medicines",medicineRouter)
