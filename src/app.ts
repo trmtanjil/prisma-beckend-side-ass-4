@@ -58,7 +58,7 @@ app.all("/api/auth/{*any}", toNodeHandler(auth));
 app.use("/api/authenticatoin",authRoutes)
 app.use("/api/categories",categoryRouter)
 
-//medicine operation 
+//medicine  operation 
 app.use("/api/seller/medicines",medicineRouter)
 
 //medicine get public
