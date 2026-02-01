@@ -1,4 +1,4 @@
-import { OrderStatus } from "../../../generated/prisma/enums";
+import { OrderStatus } from "../../generated/prisma/enums";
 import { prisma } from "../../lib/prisma";
 
 
@@ -112,7 +112,7 @@ const getSellerOrders = async (sellerId: string) => {
 const updateOrderStatus = async (
   orderId: string,
   sellerId: string,
-  status: OrderStatus 
+  status: OrderStatus
 ) => {
  // Check order exists & belongs to seller
   const order = await prisma.orders.findFirst({
