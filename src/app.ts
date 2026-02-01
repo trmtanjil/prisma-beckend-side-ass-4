@@ -49,8 +49,6 @@ app.use("/api/create-review",reviewRouter)
 app.get("/",(req:Request,res:Response)=>{
     res.send('hlw world')
 })
-// app.get("/", (req: Request, res: Response) => {
-//   res.json({ message: "hlw world" });
-// });
+
 
 export default app;

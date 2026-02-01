@@ -5,8 +5,8 @@ import { UserRole } from "../../middalewared/auth";
 
 const createMedicine = async (req: Request, res: Response) => {
     try {
-        const user = req.user; // ধরা যাক user middleware থেকে attach করা হয়েছে
-        if (!user || user.role !== "SELLER") {
+        const user = req.user; 
+        if (!user || user.role !== UserRole.SELLER) {
             return res.status(403).json({
                 error: "Permission denied",
                 message: "Only sellers can add medicines",

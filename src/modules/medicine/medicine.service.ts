@@ -12,7 +12,7 @@ name: string;
    
 }
 
-const createMedicine = async (payload:IMedicinePayload, sellerId: string)=>{
+const createMedicine = async (payload:IMedicinePayload, id: string)=>{
 
  const result = await prisma.medicines.create({
         data: {
@@ -22,7 +22,7 @@ const createMedicine = async (payload:IMedicinePayload, sellerId: string)=>{
             expiryDate: new Date(payload.expiryDate),
             categoryId: payload.categoryId,
             // এখানে sellerId শুধুমাত্র login user এর id
-            sellerId: sellerId,
+            sellerId: id,
         },
     });
     return result;
