@@ -1,15 +1,13 @@
-import express, { Router } from "express";
+import express from "express";
 import { medicineController } from "./medicine.controller";
 import auth, { UserRole } from "../../middalewared/auth";
-import { upload } from "../../middalewared/multer.middleware";
  
 
-const router:Router = express.Router()
+const router = express.Router()
 
 router.post(
   "/",
   auth(UserRole.SELLER), // create medicine only seller
-  upload.single("File"),
   medicineController.createMedicine
 );
 router.get(
@@ -39,4 +37,4 @@ router.delete(
   medicineController.deleteMedicine
 );
 
-export const medicineRouter:Router = router
+export const medicineRouter = router

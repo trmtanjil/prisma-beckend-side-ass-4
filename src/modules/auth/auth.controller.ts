@@ -1,11 +1,11 @@
-import { Request, Response } from "express";
+import type { Request, Response as ExpressResponse } from "express";
 import { auth } from "../../lib/auth";
 import { fromNodeHeaders } from "better-auth/node";
- 
-const getMe = async (req: Request, res: Response) => {
+
+const getMe = async (req: Request, res: ExpressResponse) => {
   try {
     const session = await auth.api.getSession({
-      headers: fromNodeHeaders(req.headers),
+      headers: fromNodeHeaders(req.headers as Record<string, string>),
     });
 
     if (!session) {
@@ -15,41 +15,39 @@ const getMe = async (req: Request, res: Response) => {
       });
     }
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
-      data: session, // user session data 
+      data: session,
     });
   } catch (error: any) {
-    res.status(400).json({
+    return res.status(400).json({
       success: false,
       message: error.message,
     });
   }
 };
 
-const logout = async (req: Request, res: Response) => {
+const logout = async (req: Request, res: ExpressResponse) => {
   try {
-    // ১. কুকি থেকে রিফ্রেশ টোকেন বা এক্সেস টোকেন মুছে ফেলা
     res.clearCookie("refreshToken", {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "none", // তোমার ফ্রন্টএন্ড এবং ব্যাকএন্ড আলাদা ডোমেইন হলে এটি জরুরি
+      sameSite: "none",
     });
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       message: "Logged out successfully!",
     });
   } catch (error: any) {
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       message: "Logout failed",
     });
   }
 };
 
-
 export const authController = {
   getMe,
-  logout
+  logout,
 };

@@ -4,7 +4,7 @@ import { reviewController } from "./review.controller"
 import auth, { UserRole } from "../../middalewared/auth"
 
 
-const router:Router = express.Router()
+const router  = express.Router()
 
 router.post(
     "/",
@@ -27,4 +27,4 @@ router.patch(
      reviewController.updateRivew
 )
 
-export const reviewRouter:Router=router
+export const reviewRouter =router

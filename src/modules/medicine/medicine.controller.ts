@@ -1,62 +1,37 @@
 import { Request, Response } from "express";
 import { medicineService } from "./medicine.service";
 import { UserRole } from "../../middalewared/auth";
-import { boolean } from "better-auth";
-import { uploadOnCloudinary } from "../../utils/cloudinary";
-
-
-// const createMedicine = async ( req:Request,res:Response)=>{
-// try{
-//      const user= req.user
-//  const result = await medicineService.createMedicine(req.body)
-//   res.status(201).json(result)
-// }catch(error){
-//     res.status(400).json({
-//         error:"medicine create faild",
-//         message:error
-//     })
-// }
-// }
-
-
-
-
-
-
-
-
-
+  
 
 const createMedicine = async (req: Request, res: Response) => {
     try {
-        const medicineData = req.body; 
-        const user = req.user; // নিশ্চিত হও auth middleware এটি দিচ্ছে
-
-        let imageUrl = null;
-        // req.file চেক করো (Multer এটি ফাইল হিসেবে রিসিভ করে)
-        if (req.file) {
-            // তোমার utility ফাংশন অনুযায়ী path পাঠাও
-            const uploadResponse: any = await uploadOnCloudinary(req.file.path); 
-            imageUrl = uploadResponse?.secure_url;
+        const user = req.user; // ধরা যাক user middleware থেকে attach করা হয়েছে
+        if (!user || user.role !== "SELLER") {
+            return res.status(403).json({
+                error: "Permission denied",
+                message: "Only sellers can add medicines",
+            });
         }
 
-        const result = await medicineService.createMedicine({
-            ...medicineData,
-            sellerId: user!.id,
-            image: imageUrl
-        });
-
-        res.status(201).json({
-            success: true,
-            data: result
-        });
-    } catch (error: any) {
+        // service এ sellerId explicitly pathano হচ্ছে
+        const result = await medicineService.createMedicine(req.body, user.id);
+        res.status(201).json(result);
+    } catch (error) {
         res.status(400).json({
-            success: false,
-            message: error.message || "Medicine creation failed"
+            error: "Medicine creation failed",
+            message: error instanceof Error ? error.message : error,
         });
     }
-}
+};
+
+
+
+
+
+
+
+
+
 
 
 

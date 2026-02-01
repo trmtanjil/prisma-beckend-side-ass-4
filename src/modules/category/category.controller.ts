@@ -1,38 +1,41 @@
-import { Request, Response } from "express";
+import type { Request, Response as ExpressResponse } from "express";
 import { categoryService } from "./category.service";
 
+const createCategory = async (req: Request, res: ExpressResponse) => {
+  try {
+    const result = await categoryService.createCategory(req.body);
 
-const createCategory = async (req:Request, res:Response)=>{
- try{
-    const result  = await categoryService.createCategory(req.body)
-        res.status(201).json(result)
-    
- }catch(error){
-    res.status(400).json({
-        error:"category crate faild",
-        details:error
-    })
- }
-}
+    return res.status(201).json({
+      success: true,
+      data: result,
+    });
+  } catch (error) {
+    return res.status(400).json({
+      success: false,
+      error: "category create failed",
+      details: error instanceof Error ? error.message : error,
+    });
+  }
+};
 
-const getAllCategory=async(req:Request,res:Response)=>{
-try {
+const getAllCategory = async (req: Request, res: ExpressResponse) => {
+  try {
     const result = await categoryService.getAllCategory();
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       message: "category fetched successfully",
       data: result,
     });
-  } catch (error: any) {
-    res.status(400).json({
+  } catch (error) {
+    return res.status(400).json({
       success: false,
-      message: error   ,
+      message: error instanceof Error ? error.message : error,
     });
   }
-}
+};
 
 export const categoryController = {
-createCategory,
-getAllCategory
-}
+  createCategory,
+  getAllCategory,
+};

@@ -8,7 +8,7 @@ router.get("/me", authController.getMe);
 // /api/auth/logout
 router.post(
   "/logout",
-  auth(), // নিশ্চিত করো ইউজার লগইন অবস্থায় আছে
+  auth(),  
   authController.logout
 );
 

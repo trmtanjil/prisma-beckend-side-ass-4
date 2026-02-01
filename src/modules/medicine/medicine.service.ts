@@ -1,86 +1,35 @@
-import { number } from "better-auth";
 import { Medicines } from "../../../generated/prisma/client";
 import { prisma } from "../../lib/prisma";
 
 
-// interface IMedicinePayload{
-// name: string;
-//   price: number;
-//   stock: number;
-//   expiryDate: string | Date; 
-//   categoryId: string;       
-//   sellerId: string;
-//   image:string
-  
-// }
-
-// const createMedicine = async (payload:IMedicinePayload)=>{
-
-//     const result = await prisma.medicines.create({
-//          data: {
-//       name: payload.name,
-//       price: payload.price,
-//       stock: payload.stock,
-//       // স্ট্রিং ডেটকে প্রিজমার জন্য উপযোগী অবজেক্টে রূপান্তর
-//       expiryDate: new Date(payload.expiryDate), 
-//       categoryId: payload.categoryId,
-//       sellerId: payload.sellerId,
-//       image: payload.image
-//     },
-//     })
-//     return result
-
-// }
-
-
-
-
-
-
-
-
-
-
 interface IMedicinePayload{
 name: string;
-  price: string;
-  stock: string;
+  price: number;
+  stock: number;
   expiryDate: string | Date; 
   categoryId: string;       
   sellerId: string;
-  image:string
-  
+   
 }
 
+const createMedicine = async (payload:IMedicinePayload, sellerId: string)=>{
 
-const createMedicine = async (payload: IMedicinePayload) => {
-    // ডাটাবেসে সেভ করার আগে টাইপ কনভার্ট করে নাও
-    const result = await prisma.medicines.create({
+ const result = await prisma.medicines.create({
         data: {
             name: payload.name,
-            price: parseFloat(payload.price), // string কে number করো
-            stock: parseInt(payload.stock),   // string কে integer করো
-            expiryDate: new Date(payload.expiryDate), // ISO Date ফরম্যাট লাগবে (যেমন: 2026-10-10)
+            price: payload.price,
+            stock: payload.stock,
+            expiryDate: new Date(payload.expiryDate),
             categoryId: payload.categoryId,
-            sellerId: payload.sellerId, // এটি নিশ্চিত করো controller থেকে আসছে
-            image: payload.image 
+            // এখানে sellerId শুধুমাত্র login user এর id
+            sellerId: sellerId,
         },
     });
-    return result; 
-};
+    return result;
 
+}
 
-
-
-
-
-
-
-
-
-
-
-
+ 
 
 
 const getAllMedicines = async (minPrice?:number,maxPrice?:number) => {

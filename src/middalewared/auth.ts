@@ -1,72 +1,70 @@
 import { NextFunction, Request, Response } from "express";
-import {auth as betterAuth} from "../lib/auth"
+import { auth as betterAuth } from "../lib/auth";
+import { fromNodeHeaders } from "better-auth/node";
 
-// type for role 
-export enum UserRole{
-    CUSTOMER="CUSTOMER",
-    SELLER="SELLER",
-    ADMIN="ADMIN"
+export enum UserRole {
+  CUSTOMER = "CUSTOMER",
+  SELLER = "SELLER",
+  ADMIN = "ADMIN",
 }
 
 
-declare global{
-    namespace Express{
-        interface Request{
-            user?:{
-                id:string,
-                email:string,
-                name:string,
-                role:string,
-                emailVerified:boolean;
-            }
-        }
+declare global {
+  namespace Express {
+    interface Request {
+      user?: {
+        id: string;
+        email: string;
+        name: string;
+        role: string;
+        emailVerified: boolean;
+      };
     }
+  }
 }
 
-const auth =(...roles:UserRole[])=>{
-return async (req:Request,res:Response,next:NextFunction)=>{
-    // console.log(req.headers)
-   try{
- //get session
-    const session = await betterAuth.api.getSession({
-        headers:req.headers as any 
-    })
+const auth = (...roles: UserRole[]) => {
+  return async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const session = await betterAuth.api.getSession({
+        headers: fromNodeHeaders(req.headers),
+      });
 
-    if(!session){
+      if (!session || !session.user) {
         return res.status(401).json({
-            success:false,
-            message:"you are not authorised!"
-        })
+          success: false,
+          message: "You are not authorized!",
+        });
+      }
+
+      req.user = {
+        id: session.user.id,
+        email: session.user.email,
+        name: session.user.name,
+        role: session.user.role ?? "CUSTOMER",
+        emailVerified: session.user.emailVerified ?? false,
+      };
+
+      if (roles.length > 0) {
+        const userRole = req.user.role as UserRole;
+        if (!roles.includes(userRole)) {
+          return res.status(403).json({
+            success: false,
+            message:
+              "Forbidden! You do not have permission to access this resource!",
+          });
+        }
+      }
+
+      next();
+    } catch (err) {
+      console.error("Auth Middleware Error:", err);
+      return res.status(500).json({
+        success: false,
+        message: "Internal server error during authentication",
+      });
     }
-
-    // if(!session.user.emailVerified){
-    //     return res.status(403).json({
-    //         success:false,
-    //         message:"email varification required Please verify your email"
-    //     })
-    // }
-
-    req.user={
-        id:session.user.id,
-        email:session.user.email,
-        name:session.user.name,
-        role:session.user.role as string,
-        emailVerified:session.user.emailVerified
-    }
-
-
-    if(roles.length && !roles.includes(req.user.role as UserRole)){
-        return res.status(403).json({
-            success:false,
-            message:"Forbidden! you don't have permission to access this resurces!"
-        })
-    }
-
-    next()
-   }catch(err){
-    next(err)
-   }
-}
-}
+  };
+};
 
 export default auth;

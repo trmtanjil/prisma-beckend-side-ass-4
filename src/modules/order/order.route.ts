@@ -1,10 +1,10 @@
- import express,{ Router } from "express";
+ import express  from "express";
 import { orderController } from "./order.controller";
  import auth, { UserRole } from "../../middalewared/auth";
 
 
 
-const router:Router = express.Router()
+const router = express.Router()
 
 router.post(
     "/",
@@ -32,4 +32,4 @@ router.patch(
   orderController.updateOrderStatus
 );
 
-export const orderRouter:Router = router
+export const orderRouter = router
