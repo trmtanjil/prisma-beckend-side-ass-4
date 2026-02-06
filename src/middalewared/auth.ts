@@ -26,14 +26,15 @@ declare global {
 const auth = (...roles: UserRole[]) => {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
+      console.log("coikee",req.headers)
       const session = await betterAuth.api.getSession({
         headers: fromNodeHeaders(req.headers),
       });
-
+console.log("selsion",session)
       if (!session || !session.user) {
         return res.status(401).json({
           success: false,
-          message: "You are not authorized!",
+          message: "You are not authorized! ",
         });
       }
 

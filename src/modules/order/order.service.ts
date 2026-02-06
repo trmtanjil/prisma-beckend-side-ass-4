@@ -16,6 +16,7 @@ const createOrder = async (userId: string, payload: OrderPayload)=>{
     return await prisma.$transaction(async(tx)=>{
         let totalOrderAmmount=0;
     const orderItemsData = [];
+    // console.log(orderItemsData[])
  
     for(const item of payload.items){
         const medicine = await tx.medicines.findUniqueOrThrow({

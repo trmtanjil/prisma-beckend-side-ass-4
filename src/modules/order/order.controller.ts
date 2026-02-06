@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { orderservice } from "./order.service";
 
 const createOrder= async (req:Request, res:Response)=>{
+  console.log("Usersdfs:", req.user)
     try{
         const user = req.user
          const result = await orderservice.createOrder(user?.id as string, req.body)

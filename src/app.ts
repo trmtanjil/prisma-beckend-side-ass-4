@@ -15,8 +15,15 @@ import { reviewRouter } from "./modules/review/review.route";
 const app = express();
 app.set("trust proxy", 1);
 
+// Allow multiple origins via TRUSTED_ORIGINS (comma-separated) or fallback to APP_URL
+const corsOrigins = (process.env.TRUSTED_ORIGINS || process.env.APP_URL || "http://localhost:3000")
+  .split(",")
+  .map((s) => s.trim())
+  .filter(Boolean);
+console.log('[CORS] allowed origins:', corsOrigins);
+
 app.use(cors({
-    origin:process.env.APP_URL|| "http://localhost:3000",
+    origin: corsOrigins,
     credentials:true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"] 
@@ -54,7 +61,7 @@ app.use(async (req, res, next) => {
 });
 
 // Use a standard wildcard so Express matches callbacks and subroutes properly
-app.all("/api/auth/{*any}", toNodeHandler(auth));
+app.all("/api/auth/{*splat}", toNodeHandler(auth));
 
 
 app.use("/api/authenticatoin",authRoutes)
